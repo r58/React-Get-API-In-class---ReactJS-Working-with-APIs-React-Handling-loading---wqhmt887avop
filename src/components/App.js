@@ -1,6 +1,24 @@
 import React from 'react'
 import '../styles/App.css';
 import { useEffect , useState } from 'react';
+import axios from 'axios';
+
+const fetchRandomData = (): Promise<any> => {
+  return axios
+    .get("https://jsonplaceholder.typicode.com/users")
+    .then(({ data }) => {
+      // handle success
+      console.log(data);
+      return JSON.stringify(data, null, 2);
+    })
+    .catch((err) => {
+      // handle error
+      console.log(err);
+    });
+};
+
+
+
 
 /**
  * @task : fetch data from the api, and show to frontend.  
@@ -17,7 +35,15 @@ import { useEffect , useState } from 'react';
 
 function App() {
 
-  const [data, setData] = useState([]);
+  const [data, setDataJSON] = useState([]);
+  
+  
+  useEffect(() => {
+    fetchRandomData().then((randomData) => {
+      setRandomUserDataJSON(randomData || "No user data found.");
+    });
+  }, []);
+
 
   /**
    * fetch data from api on mount. 
